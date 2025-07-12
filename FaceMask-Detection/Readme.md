@@ -24,9 +24,6 @@ https://www.kaggle.com/datasets/ashishjangra27/face-mask-12k-images-dataset
 |-------------------------------|-------------|
 | scripts/                      | Python scripts (`app.py` for GUI, `train.py` for model training) |
 | face_detector/                | Pre-trained OpenCV DNN face detector (prototxt + caffemodel) |
-| model/                        | Trained MobileNetV2 mask detection model (`mask_detector.h5`) |
-| dataset/Train/                | Training images (masked/unmasked) from Kaggle dataset |
-| dataset/Validation/           | Validation images |
 | setup.bat                     | Windows batch script to install dependencies and launch app |
 | requirements.txt              | Python dependencies used in this project |
 | README.md                     | Project documentation |
