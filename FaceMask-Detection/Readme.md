@@ -65,7 +65,8 @@ This will:
 
 ## Screenshots
 
-[Add screenshots of your app in action here. You can use Markdown image syntax or drag-and-drop in GitHub.]
+<img width="635" height="475" alt="image" src="https://github.com/user-attachments/assets/010bae11-b460-4c62-a1c5-d22c3087f9ea" />
+
 
 ## Acknowledgments
 
