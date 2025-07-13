@@ -9,7 +9,7 @@ cd scripts
 
 REM Step 2: Create virtual environment (in root folder)
 cd ..
-python -m venv venv
+python -m venv myvenv
 if errorlevel 1 (
     echo ❌ Failed to create virtual environment.
     pause
@@ -17,7 +17,7 @@ if errorlevel 1 (
 )
 
 REM Step 3: Activate the virtual environment
-call venv\Scripts\activate
+call myvenv\Scripts\activate
 
 REM Step 4: Upgrade pip
 echo 🔄 Upgrading pip...
@@ -31,8 +31,15 @@ if errorlevel 1 (
     pause
     exit /b
 )
-
-REM Step 6: Run the GUI app
+REM Step 6: Train the model 
+echo train the model 
+python scripts\train.py 
+if errorlevel 1 (
+    echo ❌ Failed 
+    pause
+    exit /b
+)
+REM Step 7: Run the GUI app
 echo ✅ Launching Face Mask Detection GUI...
 python scripts\app.py
 

@@ -12,9 +12,10 @@ IMG_SIZE = 224
 box_color = (0, 255, 255)
 
 # Load DNN face detector
-face_net = cv2.dnn.readNetFromCaffe('../face_detector/deploy.prototxt',
-                                    '../face_detector/res10_300x300_ssd_iter_140000.caffemodel')
-
+face_net = cv2.dnn.readNetFromCaffe(
+    '../face_detector/deploy.prototxt',
+    '../face_detector/res10_300x300_ssd_iter_140000.caffemodel'
+) 
 # Detect up to 4 faces
 def detect_faces_dnn(frame):
     h, w = frame.shape[:2]
@@ -32,44 +33,54 @@ def detect_faces_dnn(frame):
     return faces[:4]
 
 # Start webcam detection
+# ...existing code...
+
 def start_detection():
-    cap = cv2.VideoCapture("http://192.168.1.100:8080/video")
+    cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
-    def run():
-        while running[0]:
-            ret, frame = cap.read()
-            if not ret:
-                continue
+    def update_frame():
+        if not running[0]:
+            cap.release()
+            return
 
-            rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            faces = detect_faces_dnn(frame)
+        ret, frame = cap.read()
+        if not ret:
+            root.after(10, update_frame)
+            return
 
-            for i, (x, y, w, h) in enumerate(faces):
-                face = rgb[y:y+h, x:x+w]
-                face = cv2.resize(face, (IMG_SIZE, IMG_SIZE))
-                face = face.astype("float32") / 255.0
-                face = np.expand_dims(face, axis=0)
+        rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        faces = detect_faces_dnn(frame)
 
-                prediction = model.predict(face, verbose=0)[0]
-                confidence = np.max(prediction)
-                label_index = np.argmax(prediction)
+        for i, (x, y, w, h) in enumerate(faces):
+            face = rgb[y:y+h, x:x+w]
+            face = cv2.resize(face, (IMG_SIZE, IMG_SIZE))
+            face = face.astype("float32") / 255.0
+            face = np.expand_dims(face, axis=0)
 
-                if confidence > 0.7:
-                    label = labels[label_index]
-                    text = f"{label} - Person {i+1}"
-                    cv2.rectangle(frame, (x, y), (x+w, y+h), box_color, 2)
-                    cv2.putText(frame, text, (x, y-10),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.8, box_color, 2)
+            prediction = model.predict(face, verbose=0)[0]
+            confidence = np.max(prediction)
+            label_index = np.argmax(prediction)
 
-            img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            img = Image.fromarray(img)
-            imgtk = ImageTk.PhotoImage(image=img)
-            video_label.imgtk = imgtk
-            video_label.configure(image=imgtk)
+            if confidence > 0.7:
+                label = labels[label_index]
+                text = f"{label} - Person {i+1}"
+                cv2.rectangle(frame, (x, y), (x+w, y+h), box_color, 2)
+                cv2.putText(frame, text, (x, y-10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.8, box_color, 2)
 
-        cap.release()
+        img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        img = Image.fromarray(img)
+        imgtk = ImageTk.PhotoImage(image=img)
+        video_label.imgtk = imgtk
+        video_label.configure(image=imgtk)
+
+        root.after(10, update_frame)  # Schedule next frame
+
+    update_frame()
+
+# ...existing code...
 
     threading.Thread(target=run, daemon=True).start()
 

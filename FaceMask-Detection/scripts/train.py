@@ -7,8 +7,8 @@ from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Dropout
 from tensorflow.keras.optimizers import Adam
 
 # Set paths
-train_dir = '../dataset/Train'
-val_dir = '../dataset/Validation'
+train_dir = 'dataset\Train'
+val_dir = 'dataset\Validation'
 
 # Parameters
 IMG_SIZE = 224
@@ -70,6 +70,6 @@ history = model.fit(
 )
 
 # Save model
-os.makedirs('../model', exist_ok=True)
-model.save('../model/mask_detector.h5')
+os.makedirs('/model', exist_ok=True)
+model.save('/model/mask_detector.h5')
 print("MobileNetV2 model saved to /model/mask_detector.h5")
