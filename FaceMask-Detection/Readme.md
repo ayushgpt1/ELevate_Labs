@@ -65,7 +65,7 @@ This will:
 
 ## Screenshots
 
-<img width="635" height="475" alt="image" src="https://github.com/user-attachments/assets/010bae11-b460-4c62-a1c5-d22c3087f9ea" />
+<img width="639" height="478" alt="Screenshot 2025-07-27 145146" src="https://github.com/user-attachments/assets/211ba8a5-795e-431d-a15c-d953b1b1e10b" />
 
 
 ## Acknowledgments
